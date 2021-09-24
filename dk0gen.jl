@@ -101,7 +101,7 @@ global data = false
 
 Generate N events and dump them on file in the DECAY0 format.
 """
-function dk0gen(n::Int64, output="ge76-ssd.dk0", input="76Ge_ssd")
+function dk0gen(n::Int64; output="ge76-ssd.dk0", input="76Ge_ssd")
 
     if data == false
         global data = TwoNuData(input)
