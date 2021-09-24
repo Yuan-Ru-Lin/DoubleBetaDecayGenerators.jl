@@ -1,5 +1,6 @@
 using Random
 using Distributions
+import Base.rand
 
 struct DoubleBetaSumEnergyPRContinuous <: ContinuousUnivariateDistribution
     Q_ββ::Float64
@@ -14,18 +15,24 @@ Distributions.minimum(::DoubleBetaSumEnergyPRContinuous) = 0
 Distributions.maximum(d::DoubleBetaSumEnergyPRContinuous) = d.Q_ββ
 
 function Distributions.pdf(d::DoubleBetaSumEnergyPRContinuous, x::T) where {T<:Real}
-    m = 501.998
+
+    (x <= Distributions.minimum(d) || x >= Distributions.maximum(d)) && return 0.
+
+    m = 510.998
     x /= m
     Q = d.Q_ββ / m
 
     expr = x * (x^4 + 10x^3 + 40x^2 + 60x + 30) * (Q - x)^5
-    expr /= Q^7 * (1980 + 990Q + 220Q^2 + 22Q^3 + Q^4) / 2772
+    expr /= m * Q^7 * (1980 + 990Q + 220Q^2 + 22Q^3 + Q^4) / 2772
 
     return expr
 end
 
 function Distributions.cdf(d::DoubleBetaSumEnergyPRContinuous, x::T) where {T<:Real}
-    m = 501.998
+
+    (x <= Distributions.minimum(d) || x >= Distributions.maximum(d)) && return 0.
+
+    m = 510.998
     x /= m
     Q = d.Q_ββ / m
 
@@ -34,9 +41,20 @@ function Distributions.cdf(d::DoubleBetaSumEnergyPRContinuous, x::T) where {T<:R
     expr += 5/4*(Q*((Q-10)*Q + 20) - 6)*x^8 - 5/7*(Q*(Q*((Q-20)*Q + 80) - 60) + 6)*x^7
     expr += 1/6*Q*(Q*((Q - 40)*(Q - 10)*Q - 600) + 150)*x^6 - x^11/11
 
-    expr /= Q^7 * (1980 + 990Q + 220Q^2 + 22Q^3 + Q^4) / 2772
+    expr /= m * Q^7 * (1980 + 990Q + 220Q^2 + 22Q^3 + Q^4) / 2772
 
     return expr
+end
+
+# simple rejection method
+function Base.rand(rng::AbstractRNG, d::DoubleBetaSumEnergyPRContinuous;
+                   range::Tuple{Real,Real}=(0,maximum(d)))
+    M = 0.6
+    while true
+        x = range[1] + rand(rng) * (range[2] - range[1])
+        rand(rng) * M <= pdf(d, x) && return x
+    end
+    x
 end
 
 struct DoubleBetaSingleEnergyPRContinuous <: ContinuousUnivariateDistribution
@@ -52,7 +70,10 @@ Distributions.minimum(::DoubleBetaSingleEnergyPRContinuous) = 0
 Distributions.maximum(d::DoubleBetaSingleEnergyPRContinuous) = d.Q_ββ
 
 function Distributions.pdf(d::DoubleBetaSingleEnergyPRContinuous, x::T) where {T<:Real}
-    m = 501.998
+
+    (x <= Distributions.minimum(d) && x >= Distributions.maximum(d)) && return 0.
+
+    m = 510.998
     x /= m
     Q = d.Q_ββ / m
 

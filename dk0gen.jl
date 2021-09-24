@@ -101,14 +101,14 @@ global data = false
 
 Generate N events and dump them on file in the DECAY0 format.
 """
-function dk0gen(n::Int64, file_name="ge76-ssd.dk0")
+function dk0gen(n::Int64, output="ge76-ssd.dk0", input="76Ge_ssd")
 
     if data == false
-        global data = TwoNuData("76Ge_ssd")
+        global data = TwoNuData(input)
     end
 
     @info "Generating and writing events to file '$file_name'"
-    fout = open(file_name, "w")
+    fout = open(output, "w")
 
     print(fout,"""
  DECAY0 generated file: $file_name
