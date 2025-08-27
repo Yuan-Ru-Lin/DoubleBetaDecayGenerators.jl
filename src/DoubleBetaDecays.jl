@@ -1,3 +1,5 @@
+module DoubleBetaDecays
+
 using DelimitedFiles
 using StatsBase
 using EmpiricalDistributions
@@ -7,7 +9,7 @@ using ProgressMeter
 using Printf
 
 """
-    TwoNuData(path)
+    TwoNuDBDData(path)
 
 A structure to hold numerical calculations of two-neutrino double-beta decay in
 the format provided by Iachello, F. and Kotila, J. [1]. Must be initialized
@@ -15,14 +17,14 @@ with the path to the text files.
 
 [1] https://nucleartheory.yale.edu/double-beta-decay-phase-space-factors
 """
-struct TwoNuData
+struct TwoNuDBDData
     _ses_data::AbstractArray{Real, 1}
     _cor_data::AbstractArray{Real, 1}
     _tds_data::AbstractArray{Real, 2}
     ses_dist::UvBinnedDist
     tds_dist::MvBinnedDist
 
-    function TwoNuData(path::AbstractString)
+    function TwoNuDBDData(path::AbstractString)
         @info "Reading raw data from '$path'"
 
         _ses_data = readdlm("$path/ses.txt", Float64)[:, 3]
@@ -58,12 +60,12 @@ Convert energy to momentum (relativistic)
 momentum(E) = √((E + 511)^2 - 511^2)
 
 """
-    rand_2nbb(data::TwoNuData)
+    rand_2nbb(data::TwoNuDBDData)
 
 Generate the momenta of the two electrons emitted in two-neutrino double-beta
 decay, according to numerical calculations wrapped by 'data'. Units of keV.
 """
-function rand_2nbb(data::TwoNuData)
+function rand_2nbb(data::TwoNuDBDData)
 
     # sample electron energies
     E1, E2 = rand(data.tds_dist)
@@ -94,8 +96,6 @@ function rand_2nbb(data::TwoNuData)
     return p1, p2
 end
 
-global data = false
-
 """
     dk0gen(N; options)
 
@@ -103,15 +103,13 @@ Generate N events and dump them on file in the DECAY0 format.
 """
 function dk0gen(n::Int64; output="ge76-ssd.dk0", input="76Ge_ssd")
 
-    if data == false
-        global data = TwoNuData(input)
-    end
+    data = TwoNuDBDData(input)
 
-    @info "Generating and writing events to file '$file_name'"
+    @info "Generating and writing events to file '$output'"
     fout = open(output, "w")
 
     print(fout,"""
- DECAY0 generated file: $file_name
+ DECAY0 generated file: $output
 
   date and time :   12. 9.2020    17:50:37
   initial scrolling of (0,1) random number generator :            0
@@ -148,3 +146,5 @@ function dk0gen(n::Int64; output="ge76-ssd.dk0", input="76Ge_ssd")
 
     close(fout)
 end
+
+end # module
