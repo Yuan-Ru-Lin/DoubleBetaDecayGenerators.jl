@@ -17,8 +17,7 @@ function DoubleBetaDecays.ZeroNuDBDGenerator(; kwargs...)
 
     function _init(data::ZeroNuDBDGeneratorData, app::G4JLApplication)::Nothing
         data.gun = move!(G4ParticleGun())
-        # XXX: Why doesn't this work here?
-        #SetParticleDefinition(data.gun, FindParticle("electron"))
+        SetParticleDefinition(data.gun, FindParticle("e-"))
         return nothing
     end
 
@@ -62,8 +61,7 @@ function DoubleBetaDecays.TwoNuDBDGenerator(; kwargs...)
 
     function _init(data::TwoNuDBDGeneratorData, app::G4JLApplication)::Nothing
         data.gun = move!(G4ParticleGun())
-        # XXX: Why doesn't this work here?
-        #SetParticleDefinition(data.gun, FindParticle("electron"))
+        SetParticleDefinition(data.gun, FindParticle("e-"))
         return nothing
     end
 
