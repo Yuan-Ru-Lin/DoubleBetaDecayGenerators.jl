@@ -7,6 +7,50 @@ using LinearAlgebra
 using Rotations
 using ProgressMeter
 using Printf
+using Random: AbstractRNG, default_rng
+
+"""
+    acute_inv_cdf(x, q)
+
+The inverse of the cumulative of the "acute" probability distribution, where q
+is the linear angular coefficient.
+
+[1] https://stats.stackexchange.com/questions/171592/generate-random-numbers-with-linear-distribution
+"""
+acute_inv_cdf(x::Real, q::Real) = (√(q^2 - 2q + 4q*x+1) - 1)/q
+
+struct ZeroNuDBDData
+    _cor_data::AbstractArray{Real, 1}
+    ses_dist::UvBinnedDist
+    function ZeroNuDBDData(path::AbstractString)
+        @info "Reading raw data from '$path'"
+
+        _cor_data = readdlm("$path/cor.txt", Float64)[:, 3]
+        _ses_data = readdlm("$path/ses.txt", Float64)[:, 3]
+
+        ses_dist = UvBinnedDist(Histogram(0:2039, _ses_data, :left, true))
+
+        new(_cor_data, ses_dist)
+    end
+end
+
+function Base.rand(rng::AbstractRNG, data::ZeroNuDBDData)
+    # sample electron energies
+    E1 = rand(rng, data.ses_dist)
+    E2 = 2039.0 - E1
+    @debug "Electron energies" E1, E2
+
+    # sample the angle between the two electrons
+    # select angular coefficient
+    idx = Int(trunc(E1)) # the energy in keV can be used as index
+    α = data._cor_data[idx > 0 ? idx : 1]
+    # sample cosine of the angle from a linear pdf
+    cosθ12 = acute_inv_cdf(rand(rng), α)
+
+    E1, E2, cosθ12
+end
+
+Base.rand(data::ZeroNuDBDData) = rand(default_rng(), data)
 
 """
     TwoNuDBDData(path)
@@ -44,15 +88,23 @@ struct TwoNuDBDData
     end
 end
 
-"""
-    acute_inv_cdf(x, q)
+function Base.rand(rng::AbstractRNG, data::TwoNuDBDData)
+    # sample electron energies
+    E1, E2 = rand(rng, data.tds_dist)
+    @debug "Electron energies" E1, E2
 
-The inverse of the cumulative of the "acute" probability distribution, where q
-is the linear angular coefficient.
+    # sample the angle between the two electrons
+    # select angular coefficient
+    idx = Int(trunc(E1)) # the energy in keV can be used as index
+    α = data._cor_data[idx > 0 ? idx : 1]
+    # sample cosine of the angle from a linear pdf
+    cosθ12 = acute_inv_cdf(rand(rng), α)
+    @debug "Angle between the two electrons" cosθ12
 
-[1] https://stats.stackexchange.com/questions/171592/generate-random-numbers-with-linear-distribution
-"""
-acute_inv_cdf(x::Real, q::Real) = (√(q^2 - 2q + 4q*x+1) - 1)/q
+    E1, E2, cosθ12
+end
+
+Base.rand(data::TwoNuDBDData) = rand(default_rng(), data)
 
 """
 Convert energy to momentum (relativistic)
