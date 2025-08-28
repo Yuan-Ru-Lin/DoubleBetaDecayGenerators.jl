@@ -14,6 +14,13 @@ Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 Rotations = "6038ab10-8711-5258-84ad-4b1120ba62dc"
 StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
 
+[weakdeps]
+Geant4 = "559df036-b7a0-42fd-85df-7d5dd9d70f44"
+StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
+
+[extensions]
+DoubleBetaDecaysGeant4Ext = ["Geant4", "StaticArrays"]
+
 [compat]
 Artifacts = "1.11.0"
 Random = "1.11.0"

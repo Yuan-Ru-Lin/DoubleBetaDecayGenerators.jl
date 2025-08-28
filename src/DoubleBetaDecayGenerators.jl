@@ -1,5 +1,7 @@
 module DoubleBetaDecayGenerators
 
+export ZeroNuDBDData, TwoNuDBDData
+
 using DelimitedFiles
 using StatsBase
 using EmpiricalDistributions
@@ -199,5 +201,8 @@ function dk0gen(n::Int64; output="ge76-ssd.dk0", input="76Ge_ssd")
 
     close(fout)
 end
+
+function ZeroNuDBDGenerator end
+function TwoNuDBDGenerator end
 
 end # module
