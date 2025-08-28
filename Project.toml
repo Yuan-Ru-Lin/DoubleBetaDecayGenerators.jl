@@ -2,6 +2,7 @@ name = "DoubleBetaDecays"
 uuid = "b67d9115-b479-4391-b710-1f027b87ba2b"
 
 [deps]
+Artifacts = "56f22d72-fd6d-98f1-02f0-08ddc0907c33"
 DelimitedFiles = "8bb1440f-4735-579b-a4ab-409b98df4dab"
 EmpiricalDistributions = "0bbb1fad-0f24-45fe-94a4-415852c5cc3b"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
@@ -12,4 +13,5 @@ Rotations = "6038ab10-8711-5258-84ad-4b1120ba62dc"
 StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
 
 [compat]
+Artifacts = "1.11.0"
 Random = "1.11.0"

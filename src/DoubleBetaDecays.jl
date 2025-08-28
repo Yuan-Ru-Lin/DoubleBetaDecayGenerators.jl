@@ -8,6 +8,7 @@ using Rotations
 using ProgressMeter
 using Printf
 using Random: AbstractRNG, default_rng
+using Artifacts
 
 """
     acute_inv_cdf(x, q)
@@ -22,11 +23,11 @@ acute_inv_cdf(x::Real, q::Real) = (√(q^2 - 2q + 4q*x+1) - 1)/q
 struct ZeroNuDBDData
     _cor_data::AbstractArray{Real, 1}
     ses_dist::UvBinnedDist
-    function ZeroNuDBDData(path::AbstractString)
+    function ZeroNuDBDData(path::AbstractString = joinpath(artifact"76Ge_0vbb", "76Ge_0vbb"))
         @info "Reading raw data from '$path'"
 
-        _cor_data = readdlm("$path/cor.txt", Float64)[:, 3]
-        _ses_data = readdlm("$path/ses.txt", Float64)[:, 3]
+        _cor_data = readdlm("$path/76Ge_cor_0v.txt", Float64)[:, 3]
+        _ses_data = readdlm("$path/76Ge_ses_0v.txt", Float64)[:, 3]
 
         ses_dist = UvBinnedDist(Histogram(0:2039, _ses_data, :left, true))
 
@@ -68,12 +69,12 @@ struct TwoNuDBDData
     ses_dist::UvBinnedDist
     tds_dist::MvBinnedDist
 
-    function TwoNuDBDData(path::AbstractString)
+    function TwoNuDBDData(path::AbstractString = joinpath(artifact"76Ge_2vbb", "76Ge_2vbb"))
         @info "Reading raw data from '$path'"
 
-        _ses_data = readdlm("$path/ses.txt", Float64)[:, 3]
-        _cor_data = readdlm("$path/cor.txt", Float64)[:, 3]
-        raw_data  = readdlm("$path/2ds.txt", Float64)
+        _ses_data = readdlm("$path/76Ge_ses.txt", Float64)[:, 3]
+        _cor_data = readdlm("$path/76Ge_cor.txt", Float64)[:, 3]
+        raw_data  = readdlm("$path/76Ge_2ds.txt", Float64)
 
         _tds_data = zeros(2039, 2039)
         for i in 1:size(raw_data, 1)
