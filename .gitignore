@@ -3,3 +3,6 @@
 /76Ge*
 /exotics
 *.zip
+
+Manifest*.toml
+data
