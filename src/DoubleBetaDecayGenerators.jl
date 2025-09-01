@@ -1,6 +1,6 @@
 module DoubleBetaDecayGenerators
 
-export ZeroNuDBDData, TwoNuDBDData
+export ZeroNuDBDData, TwoNuDBDData, DBDGenerator
 
 using DelimitedFiles
 using StatsBase
@@ -22,7 +22,9 @@ is the linear angular coefficient.
 """
 acute_inv_cdf(x::Real, q::Real) = (√(q^2 - 2q + 4q*x+1) - 1)/q
 
-struct ZeroNuDBDData
+abstract type DBDData end
+
+struct ZeroNuDBDData <: DBDData
     _cor_data::AbstractArray{Real, 1}
     ses_dist::UvBinnedDist
     function ZeroNuDBDData(path::AbstractString = joinpath(artifact"76Ge_0vbb", "76Ge_0vbb"))
@@ -53,8 +55,6 @@ function Base.rand(rng::AbstractRNG, data::ZeroNuDBDData)
     E1, E2, cosθ12
 end
 
-Base.rand(data::ZeroNuDBDData) = rand(default_rng(), data)
-
 """
     TwoNuDBDData(path)
 
@@ -64,7 +64,7 @@ with the path to the text files.
 
 [1] https://nucleartheory.yale.edu/double-beta-decay-phase-space-factors
 """
-struct TwoNuDBDData
+struct TwoNuDBDData <: DBDData
     _ses_data::AbstractArray{Real, 1}
     _cor_data::AbstractArray{Real, 1}
     _tds_data::AbstractArray{Real, 2}
@@ -107,7 +107,7 @@ function Base.rand(rng::AbstractRNG, data::TwoNuDBDData)
     E1, E2, cosθ12
 end
 
-Base.rand(data::TwoNuDBDData) = rand(default_rng(), data)
+Base.rand(data::T) where {T<:DBDData} = rand(default_rng(), data)
 
 """
 Convert energy to momentum (relativistic)
@@ -202,7 +202,6 @@ function dk0gen(n::Int64; output="ge76-ssd.dk0", input="76Ge_ssd")
     close(fout)
 end
 
-function ZeroNuDBDGenerator end
-function TwoNuDBDGenerator end
+function DBDGenerator end
 
 end # module
