@@ -5,10 +5,12 @@ using Geant4
 using Geant4.SystemOfUnits
 using StaticArrays
 using Rotations
+using Random
 
-@kwdef mutable struct ZeroNuDBDGeneratorData <: G4JLGeneratorData
+@kwdef mutable struct ZeroNuDBDGeneratorData{T<:AbstractRNG} <: G4JLGeneratorData
     gun::Union{Nothing,CxxPtr{G4ParticleGun}} = nothing
     spectrum::ZeroNuDBDData = ZeroNuDBDData()
+    rng::T = default_rng()
 end
 
 function DoubleBetaDecays.ZeroNuDBDGenerator(; kwargs...)
@@ -22,14 +24,13 @@ function DoubleBetaDecays.ZeroNuDBDGenerator(; kwargs...)
     end
 
     function _gen(evt::G4Event, data::ZeroNuDBDGeneratorData)::Nothing
-        # XXX: Where do I store `rng` if I want to control the random seed?
-        E1, E2, cosθ12 = rand(data.spectrum)
+        E1, E2, cosθ12 = rand(data.rng, data.spectrum)
 
         sinθ12 = sqrt(1.0 - cosθ12^2)
-        ϕ = 2π * rand()
+        ϕ = 2π * rand(data.rng)
         dir1 = SVector{3}([0.0, 0.0, 1.0])
         dir2 = SVector{3}(sinθ12 * cos(ϕ), sinθ12 * sin(ϕ), cosθ12)
-        rot = rand(RotMatrix{3})
+        rot = rand(data.rng, RotMatrix{3})
         dir1 = rot * dir1
         dir2 = rot * dir2
 
@@ -50,9 +51,10 @@ function DoubleBetaDecays.ZeroNuDBDGenerator(; kwargs...)
     G4JLPrimaryGenerator("ZeroNuDBDGenerator", data; init_method=_init, generate_method=_gen)
 end
 
-@kwdef mutable struct TwoNuDBDGeneratorData <: G4JLGeneratorData
+@kwdef mutable struct TwoNuDBDGeneratorData{T<:AbstractRNG} <: G4JLGeneratorData
     gun::Union{Nothing,CxxPtr{G4ParticleGun}} = nothing
     spectrum::TwoNuDBDData = TwoNuDBDData()
+    rng::T = default_rng()
 end
 
 function DoubleBetaDecays.TwoNuDBDGenerator(; kwargs...)
@@ -66,14 +68,13 @@ function DoubleBetaDecays.TwoNuDBDGenerator(; kwargs...)
     end
 
     function _gen(evt::G4Event, data::TwoNuDBDGeneratorData)::Nothing
-        # XXX: Where do I store `rng` if I want to control the random seed?
-        E1, E2, cosθ12 = rand(data.spectrum)
+        E1, E2, cosθ12 = rand(data.rng, data.spectrum)
 
         sinθ12 = sqrt(1.0 - cosθ12^2)
-        ϕ = 2π * rand()
+        ϕ = 2π * rand(data.rng)
         dir1 = SVector{3}([0.0, 0.0, 1.0])
         dir2 = SVector{3}(sinθ12 * cos(ϕ), sinθ12 * sin(ϕ), cosθ12)
-        rot = rand(RotMatrix{3})
+        rot = rand(data.rng, RotMatrix{3})
         dir1 = rot * dir1
         dir2 = rot * dir2
 
