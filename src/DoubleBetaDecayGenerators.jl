@@ -1,4 +1,4 @@
-module DoubleBetaDecays
+module DoubleBetaDecayGenerators
 
 using DelimitedFiles
 using StatsBase
