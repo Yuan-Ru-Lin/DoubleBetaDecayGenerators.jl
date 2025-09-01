@@ -1,4 +1,4 @@
-name = "DoubleBetaDecays"
+name = "DoubleBetaDecayGenerators"
 uuid = "b67d9115-b479-4391-b710-1f027b87ba2b"
 authors = ["Luigi Pertoldi <gipert@pm.me>", "Yuan-Ru Lin <yuanru@uw.edu>"]
 version = "0.1.0"
