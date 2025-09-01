@@ -1,5 +1,5 @@
 ```@meta
-CurrentModule = DoubleBetaDecays
+CurrentModule = DoubleBetaDecayGenerators
 ```
 
 ```@docs

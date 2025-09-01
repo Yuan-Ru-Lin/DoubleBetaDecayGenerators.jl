@@ -1,8 +1,8 @@
-using Documenter, DoubleBetaDecays
+using Documenter, DoubleBetaDecayGenerators
 
 makedocs(
-    sitename = "DoubleBetaDecays.jl",
-    #modules = [DoubleBetaDecays],
+    sitename = "DoubleBetaDecayGenerators.jl",
+    #modules = [DoubleBetaDecayGenerators],
     pages = [
         "Home" => "index.md",
         #"Getting Started" => "getting_started.md",
