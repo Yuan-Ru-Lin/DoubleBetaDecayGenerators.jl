@@ -1,7 +1,1 @@
-```@meta
-CurrentModule = DoubleBetaDecayGenerators
-```
-
-```@docs
-TwoNuDBDData
-```
+# DoubleBetaDecayGenerators.jl

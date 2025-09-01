@@ -7,8 +7,6 @@ using StatsBase
 using EmpiricalDistributions
 using LinearAlgebra
 using Rotations
-using ProgressMeter
-using Printf
 using Random: AbstractRNG, default_rng
 using Artifacts
 
@@ -117,9 +115,14 @@ end
 Base.rand(data::T) where {T<:DBDData} = rand(default_rng(), data)
 
 """
-    Legacy code for generating events in the DECAY0 format.
+Legacy code for generating events in the DECAY0 format.
 """
 module Legacy
+
+using ..DoubleBetaDecayGenerators: TwoNuDBDData, rand, acute_inv_cdf
+using Rotations
+using ProgressMeter
+using Printf
 
 """
 Convert energy to momentum (relativistic)
