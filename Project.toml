@@ -1,5 +1,7 @@
 name = "DoubleBetaDecays"
 uuid = "b67d9115-b479-4391-b710-1f027b87ba2b"
+authors = ["Luigi Pertoldi <gipert@pm.me>", "Yuan-Ru Lin <yuanru@uw.edu>"]
+version = "0.1.0"
 
 [deps]
 Artifacts = "56f22d72-fd6d-98f1-02f0-08ddc0907c33"
