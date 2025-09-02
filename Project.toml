@@ -24,8 +24,8 @@ StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 DoubleBetaDecayGeneratorsGeant4Ext = ["Geant4", "StaticArrays"]
 
 [compat]
-Artifacts = "1.11.0"
-Random = "1.11.0"
+Artifacts = "1.10.0"
+Random = "1.10.0"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
