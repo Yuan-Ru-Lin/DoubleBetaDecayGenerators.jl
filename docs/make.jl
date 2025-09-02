@@ -1,4 +1,7 @@
-using Documenter, DoubleBetaDecayGenerators
+using Documenter, Literate, DoubleBetaDecayGenerators
+
+EXAMPLE_DIR_PATH = joinpath(@__DIR__, "src", "examples")
+Literate.markdown(joinpath(EXAMPLE_DIR_PATH, "plots.jl"), EXAMPLE_DIR_PATH, execute = true, documenter = true, credit = true)
 
 makedocs(
     sitename = "DoubleBetaDecayGenerators.jl",
@@ -10,8 +13,7 @@ makedocs(
     pages = [
         "Home" => "index.md",
         "API Reference" => "api.md",
-        #"Getting Started" => "getting_started.md",
-        #"Examples" => "examples.md",
+        "Examples" => ["examples/plots.md",],
     ],
 )
 
