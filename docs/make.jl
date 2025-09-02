@@ -1,4 +1,6 @@
-using Documenter, DoubleBetaDecayGenerators
+using Documenter, Literate, DoubleBetaDecayGenerators
+
+Literate.markdown("src/examples/plots.jl", "src/examples", execute = true, documenter = true, credit = true)
 
 makedocs(
     sitename = "DoubleBetaDecayGenerators.jl",
@@ -11,7 +13,7 @@ makedocs(
         "Home" => "index.md",
         "API Reference" => "api.md",
         #"Getting Started" => "getting_started.md",
-        #"Examples" => "examples.md",
+        "Examples" => ["examples/plots.md",],
     ],
 )
 
