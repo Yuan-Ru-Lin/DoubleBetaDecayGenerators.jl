@@ -12,7 +12,6 @@ makedocs(
     pages = [
         "Home" => "index.md",
         "API Reference" => "api.md",
-        #"Getting Started" => "getting_started.md",
         "Examples" => ["examples/plots.md",],
     ],
 )
