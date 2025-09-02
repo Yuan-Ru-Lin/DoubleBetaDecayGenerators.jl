@@ -1,6 +1,7 @@
 using Documenter, Literate, DoubleBetaDecayGenerators
 
-Literate.markdown("src/examples/plots.jl", "src/examples", execute = true, documenter = true, credit = true)
+EXAMPLE_DIR_PATH = joinpath(@__DIR__, "src", "examples")
+Literate.markdown(joinpath(EXAMPLE_DIR_PATH, "plots.jl"), EXAMPLE_DIR_PATH, execute = true, documenter = true, credit = true)
 
 makedocs(
     sitename = "DoubleBetaDecayGenerators.jl",
