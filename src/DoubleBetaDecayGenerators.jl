@@ -7,8 +7,6 @@ using StatsBase
 using EmpiricalDistributions
 using LinearAlgebra
 using Rotations
-using ProgressMeter
-using Printf
 using Random: AbstractRNG, default_rng
 using Artifacts
 
@@ -24,6 +22,14 @@ acute_inv_cdf(x::Real, q::Real) = (√(q^2 - 2q + 4q*x+1) - 1)/q
 
 abstract type DBDData end
 
+"""
+    ZeroNuDBDData(path)
+
+A structure to hold numerical calculations of zero-neutrino double-beta decay in
+the format provided by Iachello, F. and Kotila, J. [1].
+
+[1] https://nucleartheory.yale.edu/double-beta-decay-phase-space-factors
+"""
 struct ZeroNuDBDData <: DBDData
     _cor_data::AbstractArray{Real, 1}
     ses_dist::UvBinnedDist
@@ -59,8 +65,7 @@ end
     TwoNuDBDData(path)
 
 A structure to hold numerical calculations of two-neutrino double-beta decay in
-the format provided by Iachello, F. and Kotila, J. [1]. Must be initialized
-with the path to the text files.
+the format provided by Iachello, F. and Kotila, J. [1].
 
 [1] https://nucleartheory.yale.edu/double-beta-decay-phase-space-factors
 """
@@ -108,6 +113,16 @@ function Base.rand(rng::AbstractRNG, data::TwoNuDBDData)
 end
 
 Base.rand(data::T) where {T<:DBDData} = rand(default_rng(), data)
+
+"""
+Legacy code for generating events in the DECAY0 format.
+"""
+module Legacy
+
+using ..DoubleBetaDecayGenerators: TwoNuDBDData, rand, acute_inv_cdf
+using Rotations
+using ProgressMeter
+using Printf
 
 """
 Convert energy to momentum (relativistic)
@@ -201,6 +216,8 @@ function dk0gen(n::Int64; output="ge76-ssd.dk0", input="76Ge_ssd")
 
     close(fout)
 end
+
+end # module Legacy
 
 function DBDGenerator end
 
