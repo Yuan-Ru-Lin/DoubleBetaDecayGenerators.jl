@@ -1,9 +1,9 @@
 name = "DoubleBetaDecayGenerators"
 uuid = "b67d9115-b479-4391-b710-1f027b87ba2b"
-authors = ["Luigi Pertoldi <gipert@pm.me>", "Yuan-Ru Lin <yuanru@uw.edu>"]
-version = "0.1.0"
 license = "MIT"
+authors = ["Luigi Pertoldi <gipert@pm.me>", "Yuan-Ru Lin <yuanru@uw.edu>"]
 description = "A Julia package to generate double beta decays."
+version = "0.1.0"
 
 [deps]
 Artifacts = "56f22d72-fd6d-98f1-02f0-08ddc0907c33"
@@ -26,7 +26,7 @@ DoubleBetaDecayGeneratorsGeant4Ext = ["Geant4", "StaticArrays"]
 [compat]
 Artifacts = "1.10"
 DelimitedFiles = "1.9"
-EmpiricalDistributions = "0.3"
+EmpiricalDistributions = "0.3.9"
 LinearAlgebra = "1.10"
 Printf = "1.10"
 ProgressMeter = "1.10"
