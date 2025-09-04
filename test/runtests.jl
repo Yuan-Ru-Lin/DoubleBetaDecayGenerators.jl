@@ -1,6 +1,5 @@
 using Test
 using DoubleBetaDecayGenerators
-using Artifacts
 using Random
 
 @testset "Test control of random seed" begin
