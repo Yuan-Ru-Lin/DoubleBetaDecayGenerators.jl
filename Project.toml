@@ -24,8 +24,8 @@ StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 DoubleBetaDecayGeneratorsGeant4Ext = ["Geant4", "StaticArrays"]
 
 [compat]
-Artifacts = "^1.10"
-DelimitedFiles = "^1.10"
+Artifacts = "<0.0.1, 1"
+DelimitedFiles = "<0.0.1, 1"
 EmpiricalDistributions = "0.3.9"
 LinearAlgebra = "<0.0.1, 1"
 Printf = "<0.0.1, 1"
