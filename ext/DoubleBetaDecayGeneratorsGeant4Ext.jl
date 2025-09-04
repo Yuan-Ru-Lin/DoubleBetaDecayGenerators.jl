@@ -10,6 +10,8 @@ using Random
 
 @kwdef mutable struct DBDGeneratorData{T<:DBDData, U<:AbstractRNG} <: G4JLGeneratorData
     gun::Union{Nothing,CxxPtr{G4ParticleGun}} = nothing
+    sps::Union{Nothing,CxxPtr{G4SingleParticleSource}} = nothing
+    detector_physical_volume_name::String = "Detector"
     spectrum::T = T()
     rng::U = default_rng()
 end
@@ -21,6 +23,20 @@ function DoubleBetaDecayGenerators.DBDGenerator(::Type{T}; kwargs...) where {T<:
     function _init(data::U, app::G4JLApplication)::Nothing where {U<:DBDGeneratorData}
         data.gun = move!(G4ParticleGun())
         SetParticleDefinition(data.gun, FindParticle("e-"))
+
+        data.sps = move!(G4SingleParticleSource())
+        posdist = GetPosDist(data.sps)
+        SetPosDisType(posdist, "Volume")
+        # Shape doesn't matter with confinement, as long as it covers the
+        # source. But points are drawn by rejection sampling from the shape,
+        # so it can't be too big; otherwise it will be slow.
+        SetPosDisShape(posdist, "Cylinder")
+        SetRadius(posdist, 50cm)
+        SetHalfZ(posdist, 15cm)
+        SetCentreCoords(posdist, G4ThreeVector(0.0, 0.0, (15 - 2)cm))
+
+        ConfineSourceToVolume(posdist, data.detector_physical_volume_name)
+
         return nothing
     end
 
@@ -35,8 +51,8 @@ function DoubleBetaDecayGenerators.DBDGenerator(::Type{T}; kwargs...) where {T<:
         dir1 = rot * dir1
         dir2 = rot * dir2
 
-        # TODO: Implement decay position sampling within the detector volume
-        #SetParticlePosition(data.gun, CxxPtr(G4ThreeVector(0.0, 0.0, 0.0)))
+        pos = data.sps |> GetPosDist |> GenerateOne
+        SetParticlePosition(data.gun, pos)
 
         SetParticleEnergy(data.gun, E1 * keV)
         SetParticleMomentumDirection(data.gun, G4ThreeVector(dir1...))
