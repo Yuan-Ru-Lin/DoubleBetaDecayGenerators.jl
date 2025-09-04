@@ -3,13 +3,14 @@
 # In this example, we will generate 1 million events for each decay mode and plot the summed electron energy spectra as sanity checks.
 
 using DoubleBetaDecayGenerators
+using Artifacts
 using FHist
 using CairoMakie
 
 # Note that the data files needed for the generators are handled automatically via the Artifacts API. Also note that the generators, at the moment, can only be of ``^{76}\rm{Ge}``.
 
-dat_0nu = ZeroNuDBDData()
-dat_2nu = TwoNuDBDData()
+dat_0nu = ZeroNuDBDData(joinpath(artifact"KotilaIachello2012", "76Ge"))
+dat_2nu = TwoNuDBDData(joinpath(artifact"KotilaIachello2012", "76Ge"))
 
 energies_0nu = [
     let (E1, E2, cosθ12) = rand(dat_0nu)
