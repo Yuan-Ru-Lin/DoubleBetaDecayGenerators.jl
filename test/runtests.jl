@@ -1,5 +1,6 @@
 using Test
 using DoubleBetaDecayGenerators
+using Artifacts
 using Random
 
 @testset "Test control of random seed" begin
@@ -7,7 +8,7 @@ using Random
 
     Random.seed!(rng, 999)
 
-    dat_2nu = TwoNuDBDData()
+    dat_2nu = TwoNuDBDData(joinpath(artifact"KotilaIachello2012", "76Ge"))
     E1, E2, cosθ12 = rand(rng, dat_2nu)
     @test E1 ≈ 374.2355832686694 atol=1e-15
     @test E2 ≈ 1251.059139039826 atol=1e-15
@@ -15,7 +16,7 @@ using Random
 
     Random.seed!(rng, 999)
 
-    dat_0nu = ZeroNuDBDData()
+    dat_0nu = ZeroNuDBDData(joinpath(artifact"KotilaIachello2012", "76Ge"))
     E1, E2, cosθ12 = rand(rng, dat_0nu)
     @test E1 ≈ 2016.2355832686694 atol=1e-15
     @test E2 ≈ 22.764416731330584 atol=1e-15
