@@ -33,22 +33,24 @@ the format provided by Iachello, F. and Kotila, J. [1].
 struct ZeroNuDBDData <: DBDData
     _cor_data::AbstractArray{Real, 1}
     ses_dist::UvBinnedDist
-    function ZeroNuDBDData(path::AbstractString = joinpath(artifact"76Ge_0vbb", "76Ge_0vbb"))
+    Q_value_keV::Real
+    function ZeroNuDBDData(path::AbstractString)
         @info "Reading raw data from '$path'"
 
-        _cor_data = readdlm("$path/76Ge_cor_0v.txt", Float64)[:, 3]
-        _ses_data = readdlm("$path/76Ge_ses_0v.txt", Float64)[:, 3]
+        _cor_data = readdlm("$path/cor_0v.txt", Float64)[:, 3]
+        _ses_data = readdlm("$path/ses_0v.txt", Float64)[:, 3]
+        e_max_keV = length(_ses_data)
 
-        ses_dist = UvBinnedDist(Histogram(0:2039, _ses_data, :left, true))
+        ses_dist = UvBinnedDist(Histogram(0:e_max_keV, _ses_data, :left, true))
 
-        new(_cor_data, ses_dist)
+        new(_cor_data, ses_dist, Float64(e_max_keV))
     end
 end
 
 function Base.rand(rng::AbstractRNG, data::ZeroNuDBDData)
     # sample electron energies
     E1 = rand(rng, data.ses_dist)
-    E2 = 2039.0 - E1
+    E2 = data.Q_value_keV - E1
     @debug "Electron energies" E1, E2
 
     # sample the angle between the two electrons
@@ -76,21 +78,22 @@ struct TwoNuDBDData <: DBDData
     ses_dist::UvBinnedDist
     tds_dist::MvBinnedDist
 
-    function TwoNuDBDData(path::AbstractString = joinpath(artifact"76Ge_2vbb", "76Ge_2vbb"))
+    function TwoNuDBDData(path::AbstractString)
         @info "Reading raw data from '$path'"
 
-        _ses_data = readdlm("$path/76Ge_ses.txt", Float64)[:, 3]
-        _cor_data = readdlm("$path/76Ge_cor.txt", Float64)[:, 3]
-        raw_data  = readdlm("$path/76Ge_2ds.txt", Float64)
+        _ses_data = readdlm("$path/ses.txt", Float64)[:, 3]
+        e_max_keV = length(_ses_data)
+        _cor_data = readdlm("$path/cor.txt", Float64)[:, 3]
+        raw_data  = readdlm("$path/2ds.txt", Float64)
 
-        _tds_data = zeros(2039, 2039)
+        _tds_data = zeros(e_max_keV, e_max_keV)
         for i in 1:size(raw_data, 1)
             _tds_data[Int(raw_data[i, 1]), Int(raw_data[i, 2])] = raw_data[i, 5]
             _tds_data[Int(raw_data[i, 2]), Int(raw_data[i, 1])] = raw_data[i, 5]
         end
 
-        ses_dist = UvBinnedDist(Histogram(0:2039, _ses_data, :left, true))
-        tds_dist = MvBinnedDist(Histogram((0:2039, 0:2039), _tds_data, :left, true))
+        ses_dist = UvBinnedDist(Histogram(0:e_max_keV, _ses_data, :left, true))
+        tds_dist = MvBinnedDist(Histogram((0:e_max_keV, 0:e_max_keV), _tds_data, :left, true))
 
         new(_ses_data, _cor_data, _tds_data, ses_dist, tds_dist)
     end

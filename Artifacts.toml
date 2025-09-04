@@ -1,14 +1,6 @@
-[76Ge_0vbb]
-git-tree-sha1 = "762f23229b4be70e6e5a65744cd63e6e83eae8b4"
+[KotilaIachello2012]
+git-tree-sha1 = "23ef8990cdc5f6c1bc253d5176ae9fd9be3c1a2f"
 
-    [[76Ge_0vbb.download]]
-    url = "https://raw.githubusercontent.com/Yuan-Ru-Lin/DoubleBetaDecaysArtifacts/main/76Ge_0vbb.tar.gz"
-    sha256 = "83bf36e9a0ed23c8c97a67cd8b9a7fd76cb0f1ccdf328afca25aa77831e411be"
-
-[76Ge_2vbb]
-git-tree-sha1 = "83e701fe36d459b06b6f55b0f10d071d93618fbf"
-
-    [[76Ge_2vbb.download]]
-    url = "https://raw.githubusercontent.com/Yuan-Ru-Lin/DoubleBetaDecaysArtifacts/main/76Ge_2vbb.tar.gz"
-    sha256 = "6bbac0a31f8eafe16a26a610ea2b293db11ee7c49b4420fa6ff94e846a5f4d6a"
-
+    [[KotilaIachello2012.download]]
+    url = "https://github.com/Yuan-Ru-Lin/DoubleBetaDecaysArtifacts/releases/download/v0.0.1/KotilaIachello2012.tar.gz"
+    sha256 = "513d8654a6a65660773145bd26d67197660c11071e935f1ce9d748d8ec8b9fd7"
