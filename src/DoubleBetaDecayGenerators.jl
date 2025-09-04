@@ -20,7 +20,13 @@ is the linear angular coefficient.
 """
 acute_inv_cdf(x::Real, q::Real) = (√(q^2 - 2q + 4q*x+1) - 1)/q
 
+const DBD_ISOTOPES::NTuple{19,Symbol} = (
+    :Ca48, :Cd116, :Gd160, :Ge76, :Mo100, :Nd148, :Nd150, :Pd110, :Pt198,
+    :Se82, :Sm154, :Sn124, :Te128, :Te130, :Th232, :U238, :Xe134, :Xe136, :Zr96
+)
 abstract type DBDData end
+abstract type DBDDataSource end
+abstract type KotilaIachello2012 <: DBDDataSource end
 
 """
     ZeroNuDBDData(path)
@@ -34,8 +40,10 @@ struct ZeroNuDBDData <: DBDData
     _cor_data::AbstractArray{Real, 1}
     ses_dist::UvBinnedDist
     Q_value_keV::Real
-    function ZeroNuDBDData(path::AbstractString)
-        @info "Reading raw data from '$path'"
+    function ZeroNuDBDData(isotope::Symbol, datasource::Type{<:DBDDataSource} = KotilaIachello2012)
+        @assert isotope in DBD_ISOTOPES "$isotope does not undergo double-beta decay.\nAvailable isotopes are $DBD_ISOTOPES."
+        @debug "Reading raw data from '$path'"
+        path = @artifact_str("$(nameof(datasource))/$isotope")
 
         _cor_data = readdlm("$path/cor_0v.txt", Float64)[:, 3]
         _ses_data = readdlm("$path/ses_0v.txt", Float64)[:, 3]
@@ -78,8 +86,10 @@ struct TwoNuDBDData <: DBDData
     ses_dist::UvBinnedDist
     tds_dist::MvBinnedDist
 
-    function TwoNuDBDData(path::AbstractString)
-        @info "Reading raw data from '$path'"
+    function TwoNuDBDData(isotope::Symbol, datasource::Type{<:DBDDataSource} = KotilaIachello2012)
+        @assert isotope in DBD_ISOTOPES "$isotope does not undergo double-beta decay.\nAvailable isotopes are $DBD_ISOTOPES."
+        @debug "Reading raw data from '$path'"
+        path = @artifact_str("$(nameof(datasource))/$isotope")
 
         _ses_data = readdlm("$path/ses.txt", Float64)[:, 3]
         e_max_keV = length(_ses_data)

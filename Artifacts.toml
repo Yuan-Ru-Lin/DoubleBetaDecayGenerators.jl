@@ -1,6 +1,6 @@
 [KotilaIachello2012]
-git-tree-sha1 = "23ef8990cdc5f6c1bc253d5176ae9fd9be3c1a2f"
+git-tree-sha1 = "4d2a715b8f1e729c1c8ff4d808340735cd8028b3"
 
     [[KotilaIachello2012.download]]
-    url = "https://github.com/Yuan-Ru-Lin/DoubleBetaDecaysArtifacts/releases/download/v0.0.1/KotilaIachello2012.tar.gz"
-    sha256 = "513d8654a6a65660773145bd26d67197660c11071e935f1ce9d748d8ec8b9fd7"
+    url = "https://github.com/Yuan-Ru-Lin/DoubleBetaDecaysArtifacts/releases/download/v0.0.2/KotilaIachello2012.tar.gz"
+    sha256 = "1548f0a2fe215dc9af888d8c8f1ebb255ef95919fa7b27a6326fa2e8776aaa8c"
